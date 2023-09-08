@@ -110,6 +110,9 @@ const json = {
 		}
 	};
 
+const response = await axios.get(`https://script.google.com/macros/s/AKfycbyChveDT3yAJ_z7dlUUoozaXIB-VTLqEha5EHo8w8mHmJSvCsPs5S6318E-RQjpGwWyUQ/exec?kipas=`+kipas+`&humidifier=`+humidifier);
+
+
 const jsonString = JSON.stringify(json);
 fs.writeFile('./coba.json', jsonString, err => {
     if (err) {
