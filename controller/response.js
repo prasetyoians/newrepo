@@ -1,5 +1,5 @@
 const axios = require('axios');
-
+const fs = require('fs');
 
 async function identitas(req, res){
 	const identitas = {
@@ -82,14 +82,45 @@ async function weather(req, res) {
 
 async function sendData(req,res){
 	const data = req.body;
-	
+	var kipas = 1;
+	var humidifier = "";
+	if (data.temp > 0 && data.temp <=10 ) {
+		 kipas = 1;
+	}else if (data.temp >10  && data.temp <=20 ) {
+		 kipas = 2;
+	}else if (data.temp >20  && data.temp < 30 ) {
+		 kipas = 3;
+	}else{
+		 kipas = 4;
+	}
 
-	res.status(200).json({
+if (data.hum > 0 && data.hum <=50 ) {
+		 humidifier = "on";
+	}else {
+		 humidifier = "off";
+
+	}
+
+
+
+const json = {
 		'pesan':{
-			"temp": data.temp,
-			"humidifier": data.hum,
+			"kipas": kipas,
+			"humidifier": humidifier,
 		}
-	});
+	};
+
+const jsonString = JSON.stringify(json);
+fs.writeFile('./coba.json', jsonString, err => {
+    if (err) {
+        console.log('Error writing file', err)
+    } else {
+        console.log('Successfully wrote file')
+    }
+})
+	res.status(200).json(json);
 }
+
+
 
 module.exports = {identitas,penilaian,kirimData,weather,sendData};
