@@ -79,4 +79,17 @@ async function weather(req, res) {
 
 }
 
-module.exports = {identitas,penilaian,kirimData,weather};
+
+async function sendData(req,res){
+	const data = req.body;
+	
+
+	res.status(200).json({
+		'pesan':{
+			"temp": data.temp,
+			"humidifier": data.hum,
+		}
+	});
+}
+
+module.exports = {identitas,penilaian,kirimData,weather,sendData};
