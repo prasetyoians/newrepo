@@ -18,7 +18,7 @@ app.post('/kirimdata',require('./controller/response').kirimData );
 
 app.get("/weather", require("./controller/response").weather);
 
-app.get('/senddata',require('./controller/response').sendData );
+app.post('/senddata',require('./controller/response').sendData );
 
 app.get('/coba', function(req, res){
 
