@@ -82,7 +82,7 @@ async function weather(req, res) {
 
 async function sendData(req,res){
 	const data = req.body;
-	var kipas = 1;
+	var kipas = 0;
 	var humidifier = "";
 	if (data.temp > 0 && data.temp <=10 ) {
 		 kipas = 1;
