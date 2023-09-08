@@ -13,6 +13,7 @@ app.get('/', (req, res) => {
 app.get('/identitas/',require('./controller/response').identitas);
 app.get('/identitas/:id',require('./controller/response').penilaian);
 app.post('/kirimdata',require('./controller/response').kirimData );
+app.post('/senddata',require('./controller/response').sendData );
 
 app.get("/weather", require("./controller/response").weather)
 
