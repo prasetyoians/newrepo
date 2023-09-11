@@ -107,10 +107,12 @@ const json = {
 		'pesan':{
 			"kipas": kipas,
 			"humidifier": humidifier,
+			"suhu": data.temp,
+			"kelembaban": data.hum,
 		}
 	};
 
-const response = await axios.get(`https://script.google.com/macros/s/AKfycbyChveDT3yAJ_z7dlUUoozaXIB-VTLqEha5EHo8w8mHmJSvCsPs5S6318E-RQjpGwWyUQ/exec?kipas=`+kipas+`&humidifier=`+humidifier);
+const response = await axios.get(`https://script.google.com/macros/s/AKfycbwRSo8mlXB_7oA8OHNqunf7b0_3nxL3wSyLWotR2fijHlvuQj_1iqI68aigEfM_ajf_aA/exec?kipas=`+kipas+`&humidifier=`+humidifier+`&suhu=`+data.temp+`&kelembaban=`+data.hum);
 
 
 const jsonString = JSON.stringify(json);
