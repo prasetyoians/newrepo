@@ -1,6 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 
+
 async function identitas(req, res){
 	const identitas = {
 		nama:'ian',
@@ -81,51 +82,236 @@ async function weather(req, res) {
 
 
 async function sendData(req,res){
+
+	var mysql = require('mysql');
+
+var con = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "ceks"
+});
+
+
+
 	const data = req.body;
-	var kipas = 0;
-	var humidifier = "";
-	if (data.temp > 0 && data.temp <=10 ) {
-		 kipas = 1;
-	}else if (data.temp >10  && data.temp <=20 ) {
-		 kipas = 2;
-	}else if (data.temp >20  && data.temp < 30 ) {
-		 kipas = 3;
-	}else{
-		 kipas = 4;
-	}
 
-if (data.hum > 0 && data.hum <=50 ) {
-		 humidifier = "on";
-	}else {
-		 humidifier = "off";
-
-	}
-
+  
 
 
 const json = {
 		'pesan':{
-			"kipas": kipas,
-			"humidifier": humidifier,
 			"suhu": data.temp,
 			"kelembaban": data.hum,
 		}
 	};
 
-const response = await axios.get(`https://script.google.com/macros/s/AKfycbwRSo8mlXB_7oA8OHNqunf7b0_3nxL3wSyLWotR2fijHlvuQj_1iqI68aigEfM_ajf_aA/exec?kipas=`+kipas+`&humidifier=`+humidifier+`&suhu=`+data.temp+`&kelembaban=`+data.hum);
+
+res.status(200).json(json);
+
+ 
+
+const response = await axios.get(`https://script.google.com/macros/s/AKfycbxJ93dMWgpBh4B-gAC9Z1PEAOqSCa1JRiGGAALcRDlS2-IST3vJHz4gLFKQaHs1A4HWqA/exec?&suhu=`+data.temp+`&kelembaban=`+data.hum);
+
+// const jsonString = JSON.stringify(json);
+// fs.writeFile('./coba.json', jsonString, err => {
+//     if (err) {
+//         console.log('Error writing file', err);
 
 
-const jsonString = JSON.stringify(json);
-fs.writeFile('./coba.json', jsonString, err => {
-    if (err) {
-        console.log('Error writing file', err)
-    } else {
-        console.log('Successfully wrote file')
-    }
-})
-	res.status(200).json(json);
+//     } else {
+//         console.log('Successfully wrote file'+query);
+
+//     }
+// })
+
+
+// con.connect(function(err) {
+//   if (err) throw err;
+//   console.log("Connected!");
+//   var sql = 'INSERT INTO suhu (kipas,humidifier,suhu,kelembaban) VALUES ("'+kipas+'","'+humidifier+'","'+data.temp+'","'+data.hum+'" )';
+//   console.log(sql);
+//    con.query(sql, function (err, result) {
+//     if (err) throw err;
+//     console.log("1 record inserted");
+//   });
+// });
+
 }
 
 
 
-module.exports = {identitas,penilaian,kirimData,weather,sendData};
+async function jsonSpreadsheet(req, res) {
+
+    
+        // Buat permintaan ke OpenWeather API
+        const response = await axios.get(`https://script.google.com/macros/s/AKfycbz8M6AdMQ0HpQb_F1sCXO-xzoVo10gyyvXDXZxLfRgkJ4Odo3ZhNdesRC9VCSwRsB27_w/exec`);
+
+    // console.log(response);
+       // const suhu = response.data[].columnB;
+       // console.log(suhu);
+
+       res.status(200).json(response.data);
+
+
+     
+
+}
+
+async function wait(req,res){
+	//ini utuk ambil data dari spreadsheet ke html local node js
+   const response = await axios.get(`https://script.google.com/macros/s/AKfycbz8M6AdMQ0HpQb_F1sCXO-xzoVo10gyyvXDXZxLfRgkJ4Odo3ZhNdesRC9VCSwRsB27_w/exec`);
+
+     console.log(response.data);
+       // const suhu = response.data[].columnB;
+       // console.log(suhu);
+var data = response.data;
+
+      res.render('views/index',{data:data});
+}
+
+async function fromdb(req,res){
+
+
+
+	var mysql = require('mysql');
+
+var con = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "ceks"
+});
+
+
+
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+  var sql = 'SELECT * FROM suhu';
+
+   con.query(sql, function (err, rows) {
+ 			
+ 			res.render('views/fromdb',{
+				data:rows
+			});
+
+			console.log(rows);
+
+  });
+});
+
+
+}
+
+
+
+
+async function refGetData(req,res){
+	  const response = await axios.get(`https://script.google.com/macros/s/AKfycbwku3rGwox68g72taAwiwADmPFY-AczJZYOP6rEjnIDo3VefOySwP01qdn8vdUFsV95pA/exec`);
+
+     console.log(response.data);
+       // const suhu = response.data[].columnB;
+       // console.log(suhu);
+var data = response.data;
+       res.status(200).json(response.data);
+
+}
+
+
+async function refSendData(req,res){
+
+
+
+
+	const data = req.body;
+
+  var suhu_potensio = req.query.suhu_potensio;
+  var kelembaban_potensio = req.query.kelembaban_potensio;
+
+
+const json = {
+			"suhu_potensio": suhu_potensio,
+			"kelembaban_potensio": kelembaban_potensio,
+		
+	};
+
+
+res.status(200).json(json);
+
+ 
+
+const response = await axios.get(`https://script.google.com/macros/s/AKfycbzZgsXTtV9kTn9OyeEePBZhwGn9tZfaVLCogEWzyruFM6VCWhQ8foqrY2G_qt7_q1eNXA/exec?&suhu=`+suhu_potensio+`&kelembaban=`+kelembaban_potensio);
+
+
+}
+
+
+
+
+async function refGetLogData(req,res){
+	  const response = await axios.get(`https://script.google.com/macros/s/AKfycbxg8Mbmzbpc9ua6dn-Ney9Ap8Bs_8Ab-CaccPfePNjYfwaNmbybU6y0RAaftDBfRtsC/exec`);
+
+     console.log(response.data);
+       // const suhu = response.data[].columnB;
+       // console.log(suhu);
+var data = response.data;
+var panjang = response.data.length;
+
+var largest = 0;
+
+
+			var json = {
+				data : response.data,
+				length : panjang,
+				last : response.data[panjang-1],
+				first : response.data[1],
+
+			}
+       res.status(200).json(json);
+
+}
+
+
+
+async function lampPost(req,res){
+
+
+	const data = req.body;
+  
+
+const json = {
+		'pesan':{
+			"hasillamp": data,
+		}
+	};
+
+console.log(data);
+res.status(200).json(json);
+
+ 
+
+const response = await axios.get("https://script.google.com/macros/s/AKfycbxpZsvBjwwlbr3QcD6baknL2T3Uu6z18aYe_expmLsNX80EAb2GJC80kXqKQOb4-5Iqiw/exec?lampu="+data.lampu);
+
+
+}
+
+
+
+async function lampGet(req,res){
+	  const response = await axios.get(`https://script.google.com/macros/s/AKfycbzl_GwG15C178LgmDJiyS_XqgwZVf2CjK5mplsSouP-0lMJS60q4Pz1nmstHgluzBrrPg/exec`);
+
+     console.log(response.data[1]);
+       // const suhu = response.data[].columnB;
+       // console.log(suhu);
+       var data = response.data[1];
+       res.status(200).json(data);
+
+}
+
+
+
+
+
+
+module.exports = {identitas,penilaian,kirimData,weather,sendData,jsonSpreadsheet,wait,fromdb,refGetData,refSendData,refGetLogData,lampPost,lampGet};
