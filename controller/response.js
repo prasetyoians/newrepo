@@ -297,6 +297,7 @@ const response = await axios.get("https://script.google.com/macros/s/AKfycbxpZsv
 }
 
 
+//this is should've been commited before it takes;
 
 async function lampGet(req,res){
 	  const response = await axios.get(`https://script.google.com/macros/s/AKfycbzl_GwG15C178LgmDJiyS_XqgwZVf2CjK5mplsSouP-0lMJS60q4Pz1nmstHgluzBrrPg/exec`);

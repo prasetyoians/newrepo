@@ -14,7 +14,6 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.set('views', __dirname);
 
-
 app.get('/', (req, res) => {
   res.status(200).json({msg: 'Hello this shaa!'})
 })
