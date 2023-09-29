@@ -44,6 +44,8 @@ app.get('/refgetlogdata', require("./controller/response").refGetLogData);
 app.post('/lamppost', require("./controller/response").lampPost);
 app.get('/lampget', require("./controller/response").lampGet);
 
+app.get('/postname', require("./controller/response").postName);
+
 
 
 app.listen(port, () => {

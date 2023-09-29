@@ -162,7 +162,6 @@ async function wait(req,res){
 	//ini utuk ambil data dari spreadsheet ke html local node js
    const response = await axios.get(`https://script.google.com/macros/s/AKfycbz8M6AdMQ0HpQb_F1sCXO-xzoVo10gyyvXDXZxLfRgkJ4Odo3ZhNdesRC9VCSwRsB27_w/exec`);
 
-     console.log(response.data);
        // const suhu = response.data[].columnB;
        // console.log(suhu);
 var data = response.data;
@@ -236,7 +235,7 @@ const json = {
 		
 	};
 
-
+console.log(json);;
 res.status(200).json(json);
 
  
@@ -286,7 +285,6 @@ const json = {
 		}
 	};
 
-console.log(data);
 res.status(200).json(json);
 
  
@@ -297,7 +295,6 @@ const response = await axios.get("https://script.google.com/macros/s/AKfycbxpZsv
 }
 
 
-//this is should've been commited before it takes;
 
 async function lampGet(req,res){
 	  const response = await axios.get(`https://script.google.com/macros/s/AKfycbzl_GwG15C178LgmDJiyS_XqgwZVf2CjK5mplsSouP-0lMJS60q4Pz1nmstHgluzBrrPg/exec`);
@@ -311,8 +308,42 @@ async function lampGet(req,res){
 }
 
 
+async function postName(req,res){
+	var mysql = require('mysql');
+
+var con = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "ceks"
+});
+
+
+
+con.connect(function(err) {
+	var name =     req.query.name;
+  if (err) throw err;
+  console.log("Connected!");
+
+   let a = {
+            name: name,
+        }
+        
+  var sql = 'INSERT INTO name SET ?';
+
+   con.query(sql,a, function (err, rows) {
+ 			
+ 		
+   	console.log(name);
+
+  });
+});
 
 
 
 
-module.exports = {identitas,penilaian,kirimData,weather,sendData,jsonSpreadsheet,wait,fromdb,refGetData,refSendData,refGetLogData,lampPost,lampGet};
+
+
+}
+
+module.exports = {identitas,penilaian,kirimData,weather,sendData,jsonSpreadsheet,wait,fromdb,refGetData,refSendData,refGetLogData,lampPost,lampGet,postName};
