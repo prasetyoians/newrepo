@@ -218,6 +218,79 @@ var data = response.data;
 }
 
 
+
+
+async function sendDataToSps(req,res){
+
+
+
+
+	const data = req.body;
+
+  var spo2 = req.query.spo2;
+  var hr = req.query.hr;
+  var akselox = req.query.akselox;
+  var akseloy = req.query.akseloy;
+  var akseloz = req.query.akseloz;
+
+const response = await axios.get("https://script.google.com/macros/s/AKfycbwhi0FRPnUyq_5dFZkBcD4na8z0sB1DFYtJ-05DIn_C8l4ezb2NV5CMB_gmeDl2Urv3cg/exec?hr="+hr+"&spo2="+spo2+"&akselox="+akselox+"&akseloy="+akseloy+"&akseloz="+akseloz);
+
+
+
+const json = {
+			"spo2": spo2,
+			"hr": hr,
+			"akselox": akselox,
+			"akseloy": akseloy,
+			"akseloz": akseloz,
+		
+	};
+
+
+	console.log("https://script.google.com/macros/s/AKfycbwhi0FRPnUyq_5dFZkBcD4na8z0sB1DFYtJ-05DIn_C8l4ezb2NV5CMB_gmeDl2Urv3cg/exec?hr="+hr+"&spo2="+spo2+"&akselox="+akselox+"&akseloy="+akseloy+"&akseloz="+akseloz);
+
+console.log(json);;
+res.status(200).json(json);
+
+var mysql = require('mysql');
+
+var con = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "alkes"
+});
+
+
+
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+
+   let a = {
+            spo2: spo2,
+			hr: hr,
+			akselox: akselox,
+			akseloy: akseloy,
+			akseloz: akseloz,
+        }
+        
+  var sql = 'INSERT INTO heart SET ?';
+
+   con.query(sql,a, function (err, rows) {
+ 			
+ 		
+
+  });
+});
+
+
+ 
+
+
+}
+
+
 async function refSendData(req,res){
 
 
@@ -308,42 +381,6 @@ async function lampGet(req,res){
 }
 
 
-async function postName(req,res){
-	var mysql = require('mysql');
-
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "ceks"
-});
 
 
-
-con.connect(function(err) {
-	var name =     req.query.name;
-  if (err) throw err;
-  console.log("Connected!");
-
-   let a = {
-            name: name,
-        }
-        
-  var sql = 'INSERT INTO name SET ?';
-
-   con.query(sql,a, function (err, rows) {
- 			
- 		
-   	console.log(name);
-
-  });
-});
-
-
-
-
-
-
-}
-
-module.exports = {identitas,penilaian,kirimData,weather,sendData,jsonSpreadsheet,wait,fromdb,refGetData,refSendData,refGetLogData,lampPost,lampGet,postName};
+module.exports = {identitas,penilaian,kirimData,weather,sendData,jsonSpreadsheet,wait,fromdb,refGetData,refSendData,refGetLogData,lampPost,lampGet,sendDataToSps};
